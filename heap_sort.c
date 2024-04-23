@@ -57,3 +57,41 @@ void printArray(Element *array, int size) {
     printf("]\n");
 }
 
+int minimum(Element* array, int size, int a, int b){
+    if(get(array, size, a) > get(array, size, b))
+        return b;
+    return a;
+}
+
+void siftDownAt(Element* data, int size, int i){
+    int cur = i;
+    while((hasLeft(size, cur))){
+        int minChild = minimum(data, size, left(cur), right(cur));
+
+        if(get(data, size, cur) < get(data, size, minChild)){
+            break;
+        }
+
+        swapAt(data, cur, minChild);
+        cur = minChild;
+    }
+}
+
+void heapify(Element* data, int size){
+    for(int i=parent(size-1); i>=0; i--){
+        siftDownAt(data, size, i);
+    }
+}
+
+void heapSort(Element *array, int n, bool withTrace){
+    int heapSize = n;
+    heapify(array, heapSize);
+    for(int i=0; i<n-1; i++){
+        swapAt(array, 0, heapSize-1);
+        heapSize--;
+        siftDownAt(array, heapSize, 0);
+        if(withTrace == true){
+            printArray(array, n);
+        }
+    }
+}
